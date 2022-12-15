@@ -5,11 +5,11 @@ class Gameplay:
 
     OPTIONS = ["rock", "paper", "scissors"]
 
-    @staticmethod()
-    def play(self, play: str) -> dict:
-        if play not in self.OPTIONS:
+    @staticmethod
+    def play(play: str) -> dict:
+        if play not in Gameplay.OPTIONS:
             return {"player": None, "simulator": None}
 
-        simulator_choice = choice(self.OPTIONS)
+        simulator_choice = choice(Gameplay.OPTIONS)
 
         return {"player": play, "simulator": simulator_choice}
