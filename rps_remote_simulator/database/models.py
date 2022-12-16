@@ -7,7 +7,7 @@ Base = declarative_base()
 class Game(Base):
     __tablename__ = "games"
 
-    user_id = Column(ForeignKey("user.id"), primary_key=True)
+    user_id = Column(Integer, ForeignKey("user.id"), primary_key=True)
     game_result = Column(JSON, nullable=False)
 
     user = relationship("User", back_populates="gameplays", lazy="selectin")
