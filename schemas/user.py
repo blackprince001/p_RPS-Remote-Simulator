@@ -14,7 +14,6 @@ class UserCreate(UserBase):
 class User(UserBase):
     class Config:
         orm_mode = True
-        arbitrary_types_allowed = True
 
 
 class AdminCreate(UserCreate):
@@ -24,4 +23,3 @@ class AdminCreate(UserCreate):
 class Admin(UserBase):
     class Config:
         orm_mode = True
-        arbitrary_types_allowed = True
