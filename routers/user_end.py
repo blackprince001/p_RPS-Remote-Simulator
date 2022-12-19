@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 
-app = FastAPI()
+user = FastAPI()
 
 
-@app.get("/users")
+@user.get("/api/v1/users", tags=["users"])
 async def get_users():
     return {}

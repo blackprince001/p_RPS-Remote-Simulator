@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 
-app = FastAPI()
+game = FastAPI()
 
 
-@app.post("/game")
+@game.post("/api/v1/game", tags=["games"])
 async def create_game():
     return {}
