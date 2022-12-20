@@ -20,7 +20,8 @@ class User(Base):
     username = Column(String, nullable=False, unique=True)
     date_created = Column(DateTime, nullable=False)
 
-    is_admin = Column(Boolean, nullable=False, default=True)
+    is_deleted = Column(Boolean, nullable=False, default=False)
+    is_admin = Column(Boolean, nullable=False, default=False)
 
     gameplays: list[Game] = relationship(
         "Game", back_populates="user", lazy="selectin"

@@ -9,6 +9,7 @@ class UserBase(BaseModel):
 class UserCreate(UserBase):
     username: str
     date_created: datetime
+    is_deleted: bool = False
 
 
 class User(UserBase):
