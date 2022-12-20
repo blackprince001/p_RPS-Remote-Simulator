@@ -1,20 +1,21 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from sqlalchemy.orm import Session
 from sqlalchemy import select
 from typing import List
 from schemas.user import UserCreate
 from rps_remote_simulator.database.models import User as UserModel
+from utils.utils import get_db
 
 user = FastAPI()
 
 
 @user.get("/api/v1/users", tags=["users"])
-async def get_users(db: Session) -> List[UserModel, ...] | None:
+async def get_users(db: Session = Depends(get_db)) -> List[UserModel] | None:
     return db.scalars(select(UserModel).where(UserModel.is_deleted is False)).all()
 
 
 @user.get("/api/v1/user/{user_id}", tags=["users"])
-async def get_user(db: Session, user_id: int) -> UserModel | None:
+async def get_user(user_id: int, db: Session = Depends(get_db)) -> UserModel | None:
     db_user = db.get(UserModel, user_id)
 
     if db_user.is_deleted is True:
@@ -25,7 +26,9 @@ async def get_user(db: Session, user_id: int) -> UserModel | None:
 
 
 @user.post("/api/v1/users", tags=["users"])
-async def create_user(db: Session, new_user: UserCreate) -> UserModel | None:
+async def create_user(
+    new_user: UserCreate, db: Session = Depends(get_db)
+) -> UserModel | None:
     db_user = UserModel(**new_user.dict())
     db.add(db_user)
     db.commit()
@@ -34,7 +37,7 @@ async def create_user(db: Session, new_user: UserCreate) -> UserModel | None:
 
 
 @user.delete("/api/v1/user/{user_id}", tags=["users"])
-async def delete_user(db: Session, user_id: int) -> None:
+async def delete_user(user_id: int, db: Session = Depends(get_db)) -> None:
     db_user = get_user(db, user_id)
 
     if db_user.is_deleted is True:
