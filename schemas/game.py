@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from datetime import datetime
 
 
 class GameBase(BaseModel):
@@ -8,6 +9,7 @@ class GameBase(BaseModel):
 class GameplayInit(GameBase):
     user_id: int
     game_result: dict
+    date_played: datetime
 
 
 class Game(GameBase):
