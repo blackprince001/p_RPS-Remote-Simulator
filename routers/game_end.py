@@ -17,7 +17,9 @@ async def create_game(
     # you can handle the choice if it is correct
     # before you continue with the game schema
     # same goes with the user_id
-    new_game = GameplayInit(user_id, Gameplay.play(play=choice))
+    new_game = GameplayInit(
+        user_id=user_id, game_result=Gameplay.play(play=choice)
+    )
     db_game = GameModel(**new_game.dict())
     db.add(db_game)
     db.commit()
