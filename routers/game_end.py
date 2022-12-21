@@ -6,6 +6,7 @@ from rps_remote_simulator.game import Gameplay
 from sqlalchemy.orm import Session
 from sqlalchemy import select
 from typing import List
+from datetime import datetime
 
 game = FastAPI()
 
@@ -18,7 +19,9 @@ async def create_game(
     # before you continue with the game schema
     # same goes with the user_id
     new_game = GameplayInit(
-        user_id=user_id, game_result=Gameplay.play(play=choice)
+        user_id=user_id,
+        game_result=Gameplay.play(play=choice),
+        date_played=datetime.now(),
     )
     db_game = GameModel(**new_game.dict())
     db.add(db_game)
