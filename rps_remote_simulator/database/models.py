@@ -7,8 +7,10 @@ Base = declarative_base()
 class Game(Base):
     __tablename__ = "games"
 
-    user_id = Column(Integer, ForeignKey("user.id"), primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(Integer, ForeignKey("user.id"), nullable=True)
     game_result = Column(JSON, nullable=False)
+    date_played = Column(DateTime, nullable=False)
 
     user = relationship("User", back_populates="gameplays", lazy="selectin")
 
