@@ -8,7 +8,7 @@ app = FastAPI()
 
 @app.get("/")
 def root():
-    return {"Hello": "World!"}
+    return "Welcome to my game simulator, developer!"
 
 
 app.include_router(game.router)
