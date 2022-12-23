@@ -11,17 +11,22 @@ admin = FastAPI()
 
 @admin.get("/api/v1/users", tags=["admins"])
 async def get_users(db: Session = Depends(get_db)) -> List[UserModel] | None:
-    return db.scalars(select(UserModel)).all()
+    return db.scalars(select(UserModel).where(UserModel.is_deleted is False)).all()
+
+
+@admin.get("/api/v1/users/deleted", tags=["admins"])
+async def get_deleted_users(db: Session = Depends(get_db)) -> List[UserModel] | None:
+    return db.scalars(select(UserModel).where(UserModel.is_deleted is True)).all()
 
 
 @admin.get("/api/v1/users/{user_id}", tags=["admins"])
-async def get_user(user_id: int, db: Session = Depends(get_db)) -> UserModel:
+async def get_user(user_id: int, db: Session = Depends(get_db)) -> UserModel | None:
     db_user = db.get(UserModel, user_id)
 
     if db_user.is_deleted is True:
         # handle this exception well too
         raise Exception("User not found!")
-        
+
     return db_user
 
 
@@ -34,6 +39,30 @@ async def create_admin(
     db.commit()
     db.refresh(db_admin)
     return db_admin
+
+
+@admin.get("/api/v1/admins/{admin_id}", tags=["admins"])
+async def get_admin(admin_id: int, db: Session = Depends(get_db)) -> UserModel | None:
+    db_admin = db.get(UserModel, admin_id)
+
+    if db_admin is None:
+        raise Exception("Admin not found!")
+
+    return db_admin
+
+
+@admin.get("/api/v1/admins", tags=["admins"])
+async def get_admins(db: Session = Depends(get_db)) -> List[UserModel] | None:
+    return db.scalars(select(UserModel).where(UserModel.is_admin is True)).all()
+
+
+@admin.get("/api/v1/admins/deleted", tags=["admins"])
+async def get_deleted_admins(db: Session = Depends(get_db)) -> List[UserModel] | None:
+    return db.scalars(
+        select(UserModel).where(
+            UserModel.is_admin is True and UserModel.is_deleted is True
+        )
+    ).all()
 
 
 @admin.delete("/api/v1/users/{user_id}", tags=["admins"])
