@@ -11,7 +11,7 @@ from datetime import datetime
 game = FastAPI()
 
 
-@game.post("/api/v1/games", tags=["games"])
+@game.post("/api/v1/game/play", tags=["games"])
 async def create_game(
     choice: str, user_id: int, db: Session = Depends(get_db)
 ) -> GameModel | None:
