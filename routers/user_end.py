@@ -7,7 +7,7 @@ from utils.utils import get_db
 user = FastAPI()
 
 
-@user.post("/api/v1/users", tags=["users"])
+@user.post("/api/v1/user/create", tags=["users"])
 async def create_user(
     new_user: UserCreate, db: Session = Depends(get_db)
 ) -> UserModel | None:
@@ -18,7 +18,7 @@ async def create_user(
     return db_user
 
 
-@user.get("/api/v1/users/{user_id}", tags=["users"])
+@user.get("/api/v1/user/{user_id}", tags=["users"])
 async def get_user(user_id: int, db: Session = Depends(get_db)) -> UserModel | None:
     db_user = db.get(UserModel, user_id)
 
@@ -29,7 +29,7 @@ async def get_user(user_id: int, db: Session = Depends(get_db)) -> UserModel | N
     return db_user
 
 
-@user.put("/api/v1/users", tags=["users"])
+@user.patch("/api/v1/user/{user_id}", tags=["users"])
 async def change_username(
     user_id: int, new_username: str, db: Session = Depends(get_db)
 ) -> None:
