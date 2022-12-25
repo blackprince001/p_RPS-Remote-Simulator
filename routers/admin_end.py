@@ -11,12 +11,12 @@ admin = FastAPI()
 
 @admin.get("/api/v1/admin/users", tags=["admins"])
 async def get_users(db: Session = Depends(get_db)) -> List[UserModel] | None:
-    return db.scalars(select(UserModel).where(UserModel.is_deleted is False)).all()
+    return db.scalars(select(UserModel).where(UserModel.is_deleted == False)).all()
 
 
 @admin.get("/api/v1/admin/users/deleted", tags=["admins"])
 async def get_deleted_users(db: Session = Depends(get_db)) -> List[UserModel] | None:
-    return db.scalars(select(UserModel).where(UserModel.is_deleted is True)).all()
+    return db.scalars(select(UserModel).where(UserModel.is_deleted == True)).all()
 
 
 @admin.get("/api/v1/admin/user/{user_id}", tags=["admins"])
@@ -30,13 +30,16 @@ async def get_user(user_id: int, db: Session = Depends(get_db)) -> UserModel | N
     return db_user
 
 
-@admin.delete("/api/v1/admin/user/{user_id}", tags=["admins"])
+@admin.patch("/api/v1/admin/user/{user_id}", tags=["admins"])
 async def delete_user(user_id: int, db: Session = Depends(get_db)) -> None:
-    db_user = get_user(db, user_id)
+    db_user = db.get(UserModel, user_id)
 
     if db_user.is_deleted is True:
         # change this exception and handle it well with HTTPExceptions
         raise Exception("This user account has already been deleted!")
+    db_user.is_deleted = True
+    db.commit()
+    db.refresh(db_user)
 
 
 @admin.post("/api/v1/admin/create", tags=["admins"])
@@ -54,7 +57,7 @@ async def create_admin(
 async def get_admin(admin_id: int, db: Session = Depends(get_db)) -> UserModel | None:
     db_admin = db.get(UserModel, admin_id)
 
-    if db_admin is None:
+    if db_admin.is_admin is False:
         raise Exception("Admin not found!")
 
     return db_admin
@@ -62,23 +65,20 @@ async def get_admin(admin_id: int, db: Session = Depends(get_db)) -> UserModel |
 
 @admin.get("/api/v1/admins", tags=["admins"])
 async def get_admins(db: Session = Depends(get_db)) -> List[UserModel] | None:
-    return db.scalars(select(UserModel).where(UserModel.is_admin is True)).all()
+    return db.scalars(select(UserModel).where(UserModel.is_admin == True)).all()
 
 
 @admin.get("/api/v1/admins/deleted", tags=["admins"])
 async def get_deleted_admins(db: Session = Depends(get_db)) -> List[UserModel] | None:
     return db.scalars(
-        select(UserModel).where(
-            UserModel.is_admin is True and UserModel.is_deleted is True
-        )
-    ).all()
-
-
-@admin.get("/api/v1/admin/games", tags=["admins"])
-async def get_all_games(db: Session = Depends(get_db)):
-    return db.scalars(
         select(UserModel)
-        .where(UserModel.is_deleted is False)
-        .select(GameModel)
-        .where(GameModel.user_id == UserModel.id)
+        .where(UserModel.is_admin == True)
+        .where(UserModel.is_deleted == True)
     ).all()
+
+
+@admin.get("/api/v1/admin/allgames", tags=["admins"])
+async def get_all_games(
+    offset=0, limit=50, db: Session = Depends(get_db)
+) -> List[GameModel] | None:
+    return db.scalars(select(GameModel).offset(offset).limit(limit)).all()
