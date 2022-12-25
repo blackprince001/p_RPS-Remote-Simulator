@@ -36,3 +36,5 @@ async def change_username(
     db_user = db.get(UserModel, user_id)
     db_user.username = new_username
     # updating query goes here
+    db.commit()
+    db.refresh(db_user)
