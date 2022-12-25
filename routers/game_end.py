@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Depends
 from utils.utils import get_db
 from schemas.game import GameplayInit
-from rps_remote_simulator.database.models import Game as GameModel
+from rps_remote_simulator.database.models import Game as GameModel, User as UserModel
 from rps_remote_simulator.game import Gameplay
 from sqlalchemy.orm import Session
 from sqlalchemy import select
@@ -33,7 +33,18 @@ async def create_game(
 
 @game.get("/api/v1/game/{user_id}/games", tags=["games"])
 async def get_user_games(
-    user_id: int, db: Session = Depends(get_db)
+    user_id: int, offset=0, limit=100, db: Session = Depends(get_db)
 ) -> List[GameModel] | None:
     # remember to check if the user is not deleted or a game is deleted
-    return db.scalars(select(GameModel).where(GameModel.user_id == user_id)).all()
+    db_user = db.get(UserModel, user_id)
+
+    if db_user.is_deleted is True:
+        # handle this exception well too
+        raise Exception("User not found!")
+
+    return db.scalars(
+        select(GameModel)
+        .where(GameModel.user_id == user_id)
+        .offset(offset)
+        .limit(limit)
+    ).all()
