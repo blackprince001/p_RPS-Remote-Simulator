@@ -12,6 +12,7 @@ fastapi = "^0.88.0"
 sqlalchemy = "^1.4.45"
 pydantic = "1.9.2"
 uvicorn = {extras = ["standard"], version = "^0.20.0"}
+httpx = "^0.23.2"
 
 
 [tool.poetry.group.dev.dependencies]
