@@ -2,7 +2,7 @@ import pytest
 from sqlalchemy.orm import Session
 from sqlalchemy import create_engine
 from rps_remote_simulator.database.models import Base
-from schemas.user import UserCreate
+from schemas.user import UserCreate, AdminCreate
 from datetime import datetime
 
 
@@ -18,7 +18,13 @@ def db(engine):
         yield session
 
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 def user():
     now = datetime.now()
     return UserCreate(username="Prince", date_created=now, is_deleted=False)
+
+
+@pytest.fixture(scope="session")
+def admin():
+    now = datetime.now()
+    return AdminCreate(username="Kwabena", date_created=now, is_deleted=False)
