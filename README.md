@@ -77,6 +77,9 @@ To run the tests in the project:
 │   ├── conftest.py
 │   ├── __init__.py
 │   ├── test_api
+│   │   ├── __init__.py
+│   │   ├── test_admin.py
+│   │   └── test_user.py
 │   ├── test_game
 │   │   ├── __init__.py
 │   │   └── test_game.py
@@ -88,5 +91,5 @@ To run the tests in the project:
     ├── __init__.py
     └── utils.py
 
-9 directories, 26 files
+9 directories, 29 files
 ```
