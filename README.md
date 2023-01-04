@@ -46,6 +46,24 @@ To run the tests in the project:
   
 - Run pytest make commands highlighted above
 
+## Api Routes
+
+![Models](docs_assets/models.png)
+
+### Client Side
+
+![Game & User Responses](docs_assets/first.png)
+
+### Adminstration side
+
+![Admin Responses](docs_assets/second.png)
+
+### Future updates
+
+- [ ] Include Export as file types for the game data.
+
+- [ ] Make the api more generic for the primary usage of providing human simulated data for any form Linear Regression Learning.
+
 ## File Structure for Project
 
 > The project is not complete. I was going to use this and other later projects to learn about FastApi and backend engineering concepts, but School is around the corner, and I will come back to these projects when I have free time!
@@ -53,6 +71,9 @@ To run the tests in the project:
 ```console
 .
 ├── app.py
+├── docs_assets
+│   ├── first.png
+│   └── second.png
 ├── LICENSE
 ├── poetry.lock
 ├── pyproject.toml
@@ -91,5 +112,5 @@ To run the tests in the project:
     ├── __init__.py
     └── utils.py
 
-9 directories, 29 files
+10 directories, 31 files
 ```
