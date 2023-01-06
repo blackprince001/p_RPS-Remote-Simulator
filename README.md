@@ -48,7 +48,7 @@ To run the tests in the project:
 
 ## Api Routes
 
-![Models](docs_assets/models.png)
+<!-- ![Models](docs_assets/models.png) -->
 
 ### Client Side
 
