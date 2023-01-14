@@ -19,12 +19,12 @@ async def create_game(
 
     if choice not in Gameplay.OPTIONS:
         raise IncorrectPlay(status_code=400, 
-                        details="{choice} is not a move, stick playing the options!")
+                        detail="{choice} is not a move, stick playing the options!")
     
     db_user = db.get(UserModel, user_id)
     
     if db_user.is_deleted is True:
-        raise DeletedUserWarning(status_code=404, details="User does not exist!")
+        raise DeletedUserWarning(status_code=404, detail="User does not exist!")
 
     new_game = GameplayInit(
         user_id=user_id,
@@ -48,7 +48,7 @@ async def get_user_games(
 
     if db_user.is_deleted is True:
         raise DeletedUserWarning(status_code=404, 
-        details="User does not exist! Please register before you can play.")
+        detail="User does not exist! Please register before you can play.")
 
     return db.scalars(
         select(GameModel)

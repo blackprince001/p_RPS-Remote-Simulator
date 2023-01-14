@@ -24,7 +24,7 @@ async def get_user(user_id: int, db: Session = Depends(get_db)) -> UserModel | N
     db_user = db.get(UserModel, user_id)
 
     if db_user.is_deleted is True:
-        raise DeletedUserWarning(status_code=404, details=
+        raise DeletedUserWarning(status_code=404, detail=
         f"User with {user_id} does not exist!")
 
     return db_user

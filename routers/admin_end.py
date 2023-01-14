@@ -25,7 +25,7 @@ async def get_user(user_id: int, db: Session = Depends(get_db)) -> UserModel | N
     db_user = db.get(UserModel, user_id)
 
     if db_user.is_deleted is True:
-        raise UserNotFound(status_code=404, details="User not found!")
+        raise UserNotFound(status_code=404, detail="User not found!")
 
     return db_user
 
@@ -36,7 +36,7 @@ async def delete_user(user_id: int, db: Session = Depends(get_db)) -> None:
 
     if db_user.is_deleted is True:
         raise DeletedUserWarning(status_code=404, 
-            details=f"User with {user_id} has already been deleted \
+            detail=f"User with {user_id} has already been deleted \
             or does not exist!"
         )
     db_user.is_deleted = True
@@ -61,7 +61,7 @@ async def get_admin(admin_id: int, db: Session = Depends(get_db)) -> UserModel |
 
     if db_admin.is_admin is False:
         raise AdminNotFound(status_code=404, 
-                            details=f"Cannot find Admin with {admin_id}")
+                            detail=f"Cannot find Admin with {admin_id}")
 
     return db_admin
 
