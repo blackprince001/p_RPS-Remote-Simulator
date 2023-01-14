@@ -4,6 +4,7 @@ from sqlalchemy import select
 from typing import List
 from schemas.user import AdminCreate
 from rps_remote_simulator.database.models import User as UserModel, Game as GameModel
+from rps_remote_simulator.errors import DeletedUserWarning, AdminNotFound, UserNotFound
 from utils.utils import get_db
 
 admin = FastAPI()
@@ -24,8 +25,7 @@ async def get_user(user_id: int, db: Session = Depends(get_db)) -> UserModel | N
     db_user = db.get(UserModel, user_id)
 
     if db_user.is_deleted is True:
-        # handle this exception well too
-        raise Exception("User not found!")
+        raise UserNotFound(status_code=404, details="User not found!")
 
     return db_user
 
@@ -35,8 +35,10 @@ async def delete_user(user_id: int, db: Session = Depends(get_db)) -> None:
     db_user = db.get(UserModel, user_id)
 
     if db_user.is_deleted is True:
-        # change this exception and handle it well with HTTPExceptions
-        raise Exception("This user account has already been deleted!")
+        raise DeletedUserWarning(status_code=404, 
+            details=f"User with {user_id} has already been deleted \
+            or does not exist!"
+        )
     db_user.is_deleted = True
     db.commit()
     db.refresh(db_user)
@@ -58,7 +60,8 @@ async def get_admin(admin_id: int, db: Session = Depends(get_db)) -> UserModel |
     db_admin = db.get(UserModel, admin_id)
 
     if db_admin.is_admin is False:
-        raise Exception("Admin not found!")
+        raise AdminNotFound(status_code=404, 
+                            details=f"Cannot find Admin with {admin_id}")
 
     return db_admin
 
