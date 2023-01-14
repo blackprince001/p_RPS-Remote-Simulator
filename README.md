@@ -37,7 +37,7 @@
 - Set up a dev environment by running the command to install dependencies to work on the project. Do note that the make command is already dependent on the one above. So if you use this command, there will be no need for you to run the prev one.
   
   ```bash
-  poetry install --dev
+  poetry install --with dev
   ```
 
   while you're in `/RPS-Remote-Simulator`
@@ -49,7 +49,7 @@ To run the tests in the project:
 - You need to install the dev packages:
 
   ```bash
-  poetry install --dev
+  poetry install --with dev
   ```
 
 ## Api Routes
@@ -76,33 +76,35 @@ To run the tests in the project:
 
 ```console
 .
+├── LICENSE
+├── README.md
 ├── app.py
 ├── docs_assets
 │   ├── first.png
+│   ├── models.png
 │   └── second.png
-├── LICENSE
 ├── poetry.lock
 ├── pyproject.toml
-├── README.md
 ├── routers
+│   ├── __init__.py
 │   ├── admin_end.py
 │   ├── game_end.py
-│   ├── __init__.py
 │   └── user_end.py
 ├── rps_remote_simulator
-│   ├── database
-│   │   ├── core.py
-│   │   ├── __init__.py
-│   │   └── models.py
-│   ├── game.py
-│   └── __init__.py
-├── schemas
-│   ├── game.py
 │   ├── __init__.py
+│   ├── database
+│   │   ├── __init__.py
+│   │   ├── core.py
+│   │   └── models.py
+│   ├── errors.py
+│   └── game.py
+├── schemas
+│   ├── __init__.py
+│   ├── game.py
 │   └── user.py
 ├── tests
-│   ├── conftest.py
 │   ├── __init__.py
+│   ├── conftest.py
 │   ├── test_api
 │   │   ├── __init__.py
 │   │   ├── test_admin.py
@@ -118,5 +120,5 @@ To run the tests in the project:
     ├── __init__.py
     └── utils.py
 
-10 directories, 31 files
+11 directories, 33 files
 ```
