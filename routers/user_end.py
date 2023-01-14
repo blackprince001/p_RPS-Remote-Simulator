@@ -2,6 +2,7 @@ from fastapi import FastAPI, Depends
 from sqlalchemy.orm import Session
 from schemas.user import UserCreate
 from rps_remote_simulator.database.models import User as UserModel
+from rps_remote_simulator.errors import DeletedUserWarning
 from utils.utils import get_db
 
 user = FastAPI()
@@ -23,8 +24,8 @@ async def get_user(user_id: int, db: Session = Depends(get_db)) -> UserModel | N
     db_user = db.get(UserModel, user_id)
 
     if db_user.is_deleted is True:
-        # handle this exception well too
-        raise Exception("User not found!")
+        raise DeletedUserWarning(status_code=404, details=
+        f"User with {user_id} does not exist!")
 
     return db_user
 
@@ -35,6 +36,5 @@ async def change_username(
 ) -> None:
     db_user = db.get(UserModel, user_id)
     db_user.username = new_username
-    # updating query goes here
     db.commit()
     db.refresh(db_user)
